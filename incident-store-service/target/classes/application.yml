@@ -1,0 +1,23 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: incident-store-service
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/analytics}
+    username: ${DATABASE_USER:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: incident-store-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+
+logging:
+  level:
+    com.selfhealing.analytics: DEBUG
+    root: INFO

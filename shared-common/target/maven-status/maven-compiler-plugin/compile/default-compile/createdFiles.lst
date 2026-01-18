@@ -1,0 +1,8 @@
+com/selfhealing/analytics/common/model/EventType.class
+com/selfhealing/analytics/common/model/DataQualityCheck.class
+com/selfhealing/analytics/common/model/Incident.class
+com/selfhealing/analytics/common/model/CheckStatus.class
+com/selfhealing/analytics/common/model/BaseEvent.class
+com/selfhealing/analytics/common/model/IncidentSeverity.class
+com/selfhealing/analytics/common/model/CheckType.class
+com/selfhealing/analytics/common/model/IncidentStatus.class

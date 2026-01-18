@@ -1,0 +1,4 @@
+com/selfhealing/analytics/incidentstore/controller/IncidentController.class
+com/selfhealing/analytics/incidentstore/service/IncidentStoreService.class
+com/selfhealing/analytics/incidentstore/config/DatabaseConfig.class
+com/selfhealing/analytics/incidentstore/IncidentStoreServiceApplication.class

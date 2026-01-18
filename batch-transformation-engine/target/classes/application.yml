@@ -1,0 +1,16 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: batch-transformation-engine
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/analytics}
+    username: ${DATABASE_USER:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+logging:
+  level:
+    com.selfhealing.analytics: DEBUG
+    root: INFO

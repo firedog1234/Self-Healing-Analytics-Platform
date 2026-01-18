@@ -1,0 +1,125 @@
+global:
+  namespace: analytics-platform
+  
+# Infrastructure Components
+postgres:
+  enabled: true
+  replicas: 1
+  storage: 10Gi
+  image:
+    repository: postgres
+    tag: "15-alpine"
+  
+kafka:
+  enabled: true
+  replicas: 1
+  zookeeper:
+    replicas: 1
+  
+neo4j:
+  enabled: true
+  replicas: 1
+  storage: 10Gi
+  image:
+    repository: neo4j
+    tag: "5.15.0"
+
+# Microservices
+eventGenerator:
+  enabled: true
+  replicas: 1
+  image:
+    repository: event-generator
+    tag: "latest"
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+ingestionService:
+  enabled: true
+  replicas: 2  # StatefulSet for stable consumer group identity
+  image:
+    repository: ingestion-service
+    tag: "latest"
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+batchTransformationEngine:
+  enabled: true
+  replicas: 1
+  image:
+    repository: batch-transformation-engine
+    tag: "latest"
+  schedule: "*/15 * * * *"  # Cron schedule
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+dataQualityService:
+  enabled: true
+  replicas: 1
+  image:
+    repository: data-quality-service
+    tag: "latest"
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+lineageService:
+  enabled: true
+  replicas: 1
+  image:
+    repository: lineage-service
+    tag: "latest"
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+aiOpsEngine:
+  enabled: true
+  replicas: 1
+  image:
+    repository: ai-ops-engine
+    tag: "latest"
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "200m"
+    limits:
+      memory: "1Gi"
+      cpu: "1000m"
+
+incidentStoreService:
+  enabled: true
+  replicas: 1
+  image:
+    repository: incident-store-service
+    tag: "latest"
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"

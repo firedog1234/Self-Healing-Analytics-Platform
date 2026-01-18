@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lineage-service
+  namespace: analytics-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lineage-service
+  template:
+    metadata:
+      labels:
+        app: lineage-service
+    spec:
+      containers:
+      - name: lineage-service
+        image: lineage-service:latest
+        ports:
+        - containerPort: 8085
+        env:
+        - name: NEO4J_URI
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: NEO4J_URI
+        - name: NEO4J_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: NEO4J_USERNAME
+        - name: NEO4J_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: neo4j-password
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lineage-service
+  namespace: analytics-platform
+spec:
+  selector:
+    app: lineage-service
+  ports:
+  - port: 8085
+    targetPort: 8085

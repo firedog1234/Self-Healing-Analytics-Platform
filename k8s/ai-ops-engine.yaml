@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-ops-engine
+  namespace: analytics-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai-ops-engine
+  template:
+    metadata:
+      labels:
+        app: ai-ops-engine
+    spec:
+      containers:
+      - name: ai-ops-engine
+        image: ai-ops-engine:latest
+        ports:
+        - containerPort: 8086
+        env:
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: KAFKA_BOOTSTRAP_SERVERS
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "200m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-ops-engine
+  namespace: analytics-platform
+spec:
+  selector:
+    app: ai-ops-engine
+  ports:
+  - port: 8086
+    targetPort: 8086

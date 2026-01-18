@@ -1,0 +1,3 @@
+com/selfhealing/analytics/ingestion/config/DatabaseConfig.class
+com/selfhealing/analytics/ingestion/IngestionServiceApplication.class
+com/selfhealing/analytics/ingestion/service/EventIngestionService.class

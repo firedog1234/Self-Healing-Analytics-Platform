@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: analytics-platform
+data:
+  KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+  DATABASE_URL: "jdbc:postgresql://postgres:5432/analytics"
+  DATABASE_USER: "postgres"
+  DATABASE_PASSWORD: "postgres"
+  NEO4J_URI: "bolt://neo4j:7687"
+  NEO4J_USERNAME: "neo4j"
+  NEO4J_PASSWORD: "password"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+  namespace: analytics-platform
+type: Opaque
+stringData:
+  database-password: "postgres"
+  neo4j-password: "password"

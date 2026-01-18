@@ -1,0 +1,8 @@
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/shared-common/src/main/java/com/selfhealing/analytics/common/model/BaseEvent.java
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/shared-common/src/main/java/com/selfhealing/analytics/common/model/CheckStatus.java
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/shared-common/src/main/java/com/selfhealing/analytics/common/model/CheckType.java
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/shared-common/src/main/java/com/selfhealing/analytics/common/model/DataQualityCheck.java
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/shared-common/src/main/java/com/selfhealing/analytics/common/model/EventType.java
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/shared-common/src/main/java/com/selfhealing/analytics/common/model/Incident.java
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/shared-common/src/main/java/com/selfhealing/analytics/common/model/IncidentSeverity.java
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/shared-common/src/main/java/com/selfhealing/analytics/common/model/IncidentStatus.java

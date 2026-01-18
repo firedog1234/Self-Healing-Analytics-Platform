@@ -1,0 +1,96 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: batch-transformation-engine
+  namespace: analytics-platform
+spec:
+  schedule: "*/15 * * * *" # Every 15 minutes
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: batch-transformation-engine
+            image: batch-transformation-engine:latest
+            ports:
+            - containerPort: 8083
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: DATABASE_URL
+            - name: DATABASE_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: DATABASE_USER
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: database-password
+            resources:
+              requests:
+                memory: "256Mi"
+                cpu: "100m"
+              limits:
+                memory: "512Mi"
+                cpu: "500m"
+          restartPolicy: OnFailure
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: batch-transformation-engine-scheduler
+  namespace: analytics-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: batch-transformation-engine
+  template:
+    metadata:
+      labels:
+        app: batch-transformation-engine
+    spec:
+      containers:
+      - name: batch-transformation-engine
+        image: batch-transformation-engine:latest
+        ports:
+        - containerPort: 8083
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DATABASE_URL
+        - name: DATABASE_USER
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DATABASE_USER
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: database-password
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: batch-transformation-engine
+  namespace: analytics-platform
+spec:
+  selector:
+    app: batch-transformation-engine
+  ports:
+  - port: 8083
+    targetPort: 8083
