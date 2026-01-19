@@ -12,6 +12,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -93,11 +94,11 @@ public class EventIngestionService {
             jdbcTemplate.update(sql,
                 event.getEventId(),
                 event.getEventType() != null ? event.getEventType().name() : null,
-                event.getTimestamp(),
+                event.getTimestamp() != null ? Timestamp.from(event.getTimestamp()) : null,
                 event.getUserId(),
                 event.getSchemaVersion() != null ? event.getSchemaVersion() : "1.0",
                 propertiesJson,
-                Instant.now()
+                Timestamp.from(Instant.now())
             );
         } catch (Exception e) {
             log.error("Error storing event: {}", event.getEventId(), e);
