@@ -6,7 +6,7 @@ This guide shows you step-by-step how to run the project and observe the self-he
 
 ```bash
 # Navigate to project directory
-cd /Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform
+cd <project-root>
 
 # Build the project first
 mvn clean package -DskipTests

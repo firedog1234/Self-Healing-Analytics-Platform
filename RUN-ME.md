@@ -14,8 +14,9 @@ docker ps
 ## Step 1: Build the Project (One terminal)
 
 ```bash
-# Navigate to project directory
-cd /Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform
+# Navigate to project root directory
+cd <project-root>
+# Or if you're already in the project directory, skip this step
 
 # Build all JAR files
 mvn clean package -DskipTests
@@ -63,7 +64,7 @@ docker-compose ps
 
 ### **Terminal 1: Watch Event Generator** (Generates events)
 ```bash
-cd /Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform
+cd <project-root>
 docker-compose logs -f event-generator
 ```
 
@@ -76,7 +77,7 @@ docker-compose logs -f event-generator
 
 ### **Terminal 2: Watch Ingestion Service** (Consumes events from Kafka)
 ```bash
-cd /Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform
+cd <project-root>
 docker-compose logs -f ingestion-service
 ```
 
@@ -88,7 +89,7 @@ docker-compose logs -f ingestion-service
 
 ### **Terminal 3: Watch Data Quality Service** (Monitors data)
 ```bash
-cd /Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform
+cd <project-root>
 docker-compose logs -f data-quality-service
 ```
 
@@ -100,7 +101,7 @@ docker-compose logs -f data-quality-service
 
 ### **Terminal 4: Watch AI Ops Engine** (Analyzes incidents)
 ```bash
-cd /Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform
+cd <project-root>
 docker-compose logs -f ai-ops-engine
 ```
 
@@ -113,7 +114,7 @@ docker-compose logs -f ai-ops-engine
 ### **Terminal 5: Query Database** (See the data)
 
 ```bash
-cd /Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform
+cd <project-root>
 
 # Connect to PostgreSQL
 docker-compose exec postgres psql -U postgres -d analytics
@@ -155,7 +156,7 @@ LIMIT 5;
 ### **Terminal 6: Check Service Status** (Monitor health)
 
 ```bash
-cd /Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform
+cd <project-root>
 
 # Check all services
 docker-compose ps

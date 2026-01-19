@@ -42,7 +42,7 @@ If `docker ps` fails with "Cannot connect to Docker daemon", start Docker Deskto
 Navigate to the project root directory and build all modules:
 
 ```bash
-cd /Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform
+cd <project-root>
 
 # Clean and compile all modules
 mvn clean compile
