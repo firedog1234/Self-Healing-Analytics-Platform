@@ -2,6 +2,18 @@
 
 A Java-based analytics platform that ingests synthetic event data, runs batch analytics pipelines, detects data and pipeline failures, and applies AI Ops techniques to classify, correlate, and explain incidents with recommended remediations.
 
+## What Is This?
+
+A **complete data analytics platform** that:
+1. **Generates** synthetic e-commerce events (orders, payments, user actions)
+2. **Ingests** events into a database via Kafka
+3. **Processes** data through batch analytics pipelines (revenue, funnels, retention)
+4. **Monitors** data quality and detects failures automatically
+5. **Explains** what went wrong using AI-powered root cause analysis
+6. **Suggests** how to fix problems with actionable remediation steps
+
+Think of it as a **smart data platform that watches itself** and automatically diagnoses problems.
+
 ## Architecture Overview
 
 The platform consists of 7 microservices working together:
@@ -11,7 +23,7 @@ The platform consists of 7 microservices working together:
 3. **Batch Transformation Engine** - Scheduled batch jobs that compute analytics (daily revenue, funnels, retention)
 4. **Data Quality & Failure Detection** - Monitors data quality, detects anomalies, and emits structured failure events
 5. **Lineage & Dependency Graph** - Neo4j-based service managing pipeline lineage and dependency relationships
-6. **AI Ops Engine** - Classifies incidents, correlates failures, generates root cause explanations, and provides remediation recommendations
+6. **AI Ops Engine** - Classifies incidents, correlates failures, generates root cause explanations, and provides remediation recommendations (supports OpenAI/Anthropic or rule-based fallback)
 7. **Incident Store & Feedback Loop** - Persists incidents, explanations, and resolutions for continuous learning
 
 ## Technology Stack
@@ -45,39 +57,62 @@ Self-Healing-Analytics-Platform/
 
 ### Prerequisites
 
-- Java 17+
-- Maven 3.8+
-- Docker and Docker Compose
-- (Optional) Kubernetes cluster and kubectl
-- (Optional) Helm 3.x
+- **Java 17+** - `java -version` to check
+- **Maven 3.8+** - `mvn -version` to check
+- **Docker Desktop** - Must be running (green icon in menu bar)
+  - Download: https://www.docker.com/products/docker-desktop
 
-### Local Development with Docker Compose
+### Step-by-Step: How to Run
 
-1. **Build all microservices:**
+1. **Build the project:**
    ```bash
-   mvn clean install -DskipTests
+   mvn clean package -DskipTests
+   ```
+   Wait for `BUILD SUCCESS` message.
+
+2. **Build Docker images:**
+   ```bash
+   docker-compose build
    ```
 
-2. **Start all services:**
+3. **Start all services:**
    ```bash
    docker-compose up -d
    ```
+   Wait 30-60 seconds for all services to start.
 
-3. **Verify services are running:**
+4. **Verify everything is running:**
    ```bash
    docker-compose ps
    ```
+   All services should show "Up" status.
 
-4. **View logs:**
+5. **Check that events are being generated and ingested:**
    ```bash
+   # View event generator logs
    docker-compose logs -f event-generator
+   
+   # View ingestion service logs
    docker-compose logs -f ingestion-service
+   
+   # Check database for ingested events
+   docker-compose exec postgres psql -U postgres -d analytics -c "SELECT COUNT(*) FROM raw_events;"
    ```
 
-5. **Stop all services:**
+6. **Stop all services:**
    ```bash
    docker-compose down
    ```
+
+### What to Expect
+
+- **Event Generator** creates events every 5 seconds
+- **Ingestion Service** stores events in PostgreSQL
+- **Batch Engine** processes data every minute
+- **Data Quality Service** monitors tables every 30 seconds
+- **AI Ops Engine** analyzes failures and creates incidents
+
+You should see events appearing in the database within a minute of starting.
 
 ### Service Ports
 
@@ -92,69 +127,27 @@ Self-Healing-Analytics-Platform/
 - Kafka: `9092`
 - Neo4j: `7474` (HTTP), `7687` (Bolt)
 
-### Kubernetes Deployment
+### Optional: AI-Powered Diagnoses
 
-1. **Create namespace:**
+The AI Ops Engine supports real AI for intelligent root cause analysis. **No API keys required** - it works fine with rule-based fallback by default.
+
+**To enable AI (optional):**
+1. Get an API key from [OpenAI](https://platform.openai.com/api-keys) or [Anthropic](https://console.anthropic.com/)
+2. Set environment variables:
    ```bash
-   kubectl apply -f k8s/namespace.yaml
+   export AI_PROVIDER=openai
+   export AI_OPENAI_ENABLED=true
+   export AI_OPENAI_API_KEY=sk-your-key-here
    ```
+3. Restart: `docker-compose restart ai-ops-engine`
 
-2. **Deploy infrastructure:**
-   ```bash
-   kubectl apply -f k8s/configmaps.yaml
-   kubectl apply -f k8s/postgres.yaml
-   kubectl apply -f k8s/kafka.yaml
-   kubectl apply -f k8s/neo4j.yaml
-   ```
+See `ai-ops-engine/AI_SETUP.md` for detailed configuration.
 
-3. **Deploy microservices:**
-   ```bash
-   kubectl apply -f k8s/event-generator.yaml
-   kubectl apply -f k8s/ingestion-service.yaml      # StatefulSet
-   kubectl apply -f k8s/batch-transformation-engine.yaml
-   kubectl apply -f k8s/data-quality-service.yaml
-   kubectl apply -f k8s/lineage-service.yaml
-   kubectl apply -f k8s/ai-ops-engine.yaml
-   kubectl apply -f k8s/incident-store-service.yaml  # StatefulSet
-   ```
+**Cost:** ~$0.0003-0.0005 per incident analysis (only if AI is enabled)
 
-4. **Check deployment status:**
-   ```bash
-   kubectl get pods -n analytics-platform
-   kubectl get statefulsets -n analytics-platform
-   ```
+### Kubernetes Deployment (Optional)
 
-### Helm Deployment
-
-1. **Install using Helm:**
-   ```bash
-   helm install analytics-platform ./helm/analytics-platform \
-     --namespace analytics-platform \
-     --create-namespace
-   ```
-
-2. **Upgrade deployment:**
-   ```bash
-   helm upgrade analytics-platform ./helm/analytics-platform \
-     --namespace analytics-platform
-   ```
-
-3. **Uninstall:**
-   ```bash
-   helm uninstall analytics-platform --namespace analytics-platform
-   ```
-
-## StatefulSet Services
-
-The following services use **StatefulSets** in Kubernetes for stable network identities and stateful behavior:
-
-1. **Ingestion Service** - Requires stable Kafka consumer group identities for proper message partitioning
-2. **Incident Store Service** - Manages persistent incident data with stable identity
-3. **PostgreSQL** - Database with persistent storage
-4. **Kafka** - Message broker with persistent state
-5. **Neo4j** - Graph database with persistent storage
-
-Other services use **Deployments** as they are stateless.
+For production deployment, see `k8s/` directory for Kubernetes manifests and `helm/` for Helm charts.
 
 ## Data Flow
 
@@ -176,63 +169,25 @@ Other services use **Deployments** as they are stateless.
 - `GET /api/incidents/similar/{classification}` - Get similar historical incidents
 - `POST /api/incidents/{incidentId}/resolve` - Resolve an incident
 
-## Configuration
+## Troubleshooting
 
-Services are configured via environment variables or Spring Boot `application.yml`:
+**Docker not starting?**
+- Make sure Docker Desktop is running (check menu bar icon)
+- Run `docker ps` to verify Docker is accessible
 
-- `KAFKA_BOOTSTRAP_SERVERS` - Kafka broker address
-- `DATABASE_URL` - PostgreSQL connection URL
-- `DATABASE_USER` - PostgreSQL username
-- `DATABASE_PASSWORD` - PostgreSQL password
-- `NEO4J_URI` - Neo4j connection URI
-- `NEO4J_USERNAME` - Neo4j username
-- `NEO4J_PASSWORD` - Neo4j password
+**Services not connecting?**
+- Wait 30-60 seconds after `docker-compose up -d` for all services to start
+- Check logs: `docker-compose logs <service-name>`
+- Verify Kafka is running: `docker-compose ps kafka`
 
-## Development
+**No events in database?**
+- Check event generator logs: `docker-compose logs event-generator`
+- Check ingestion service logs: `docker-compose logs ingestion-service`
+- Verify Kafka connectivity in logs
 
-### Building Individual Services
-
-```bash
-cd event-generator
-mvn clean package
-```
-
-### Running Services Locally (without Docker)
-
-1. Start infrastructure:
-   - PostgreSQL on `localhost:5432`
-   - Kafka on `localhost:9092`
-   - Neo4j on `localhost:7687`
-
-2. Run services:
-   ```bash
-   cd event-generator
-   mvn spring-boot:run
-   ```
-
-## Monitoring & Observability
-
-- Logs: All services output structured logs
-- Metrics: Available via Spring Boot Actuator endpoints (when enabled)
-- Health Checks: Built into Docker Compose and Kubernetes deployments
-
-## Testing
-
-Run tests:
-```bash
-mvn test
-```
-
-## Production Considerations
-
-- Replace in-memory deduplication with Redis
-- Use external Kafka cluster (managed service or production-grade deployment)
-- Implement proper secret management (e.g., Kubernetes Secrets, Vault)
-- Add monitoring and alerting (Prometheus, Grafana)
-- Enable TLS/SSL for all connections
-- Implement proper backup strategies for PostgreSQL and Neo4j
-- Use managed database services in production
-- Scale services based on load (especially Ingestion Service and Batch Engine)
+**Build errors?**
+- Make sure Java 17+ is installed: `java -version`
+- Clean and rebuild: `mvn clean package -DskipTests`
 
 ## License
 

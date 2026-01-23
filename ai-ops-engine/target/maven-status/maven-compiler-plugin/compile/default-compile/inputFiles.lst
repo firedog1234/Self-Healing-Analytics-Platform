@@ -1,3 +1,8 @@
 /Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/ai-ops-engine/src/main/java/com/selfhealing/analytics/aiops/AIOpsEngineApplication.java
 /Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/ai-ops-engine/src/main/java/com/selfhealing/analytics/aiops/config/WebClientConfig.java
 /Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/ai-ops-engine/src/main/java/com/selfhealing/analytics/aiops/service/AIOpsService.java
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/ai-ops-engine/src/main/java/com/selfhealing/analytics/aiops/service/AIService.java
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/ai-ops-engine/src/main/java/com/selfhealing/analytics/aiops/service/AIServiceProvider.java
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/ai-ops-engine/src/main/java/com/selfhealing/analytics/aiops/service/AnthropicService.java
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/ai-ops-engine/src/main/java/com/selfhealing/analytics/aiops/service/OpenAIService.java
+/Users/avipatel/IdeaProjects/Self-Healing-Analytics-Platform/ai-ops-engine/src/main/java/com/selfhealing/analytics/aiops/service/RuleBasedFallbackService.java

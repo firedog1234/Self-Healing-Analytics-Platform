@@ -1,4 +1,10 @@
+com/selfhealing/analytics/aiops/service/AIService.class
 com/selfhealing/analytics/aiops/config/WebClientConfig.class
+com/selfhealing/analytics/aiops/service/AnthropicService.class
+com/selfhealing/analytics/aiops/service/RuleBasedFallbackService$1.class
+com/selfhealing/analytics/aiops/service/RuleBasedFallbackService.class
 com/selfhealing/analytics/aiops/AIOpsEngineApplication.class
+com/selfhealing/analytics/aiops/service/AIServiceProvider.class
 com/selfhealing/analytics/aiops/service/AIOpsService$1.class
 com/selfhealing/analytics/aiops/service/AIOpsService.class
+com/selfhealing/analytics/aiops/service/OpenAIService.class
